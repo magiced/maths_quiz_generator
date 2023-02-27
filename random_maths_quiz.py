@@ -1,22 +1,32 @@
 import random
-num_questions = 10
+num_questions = 30
 min = 1
-max = 5
+max = 10
 
 def generate_random_maths_question(min,max):
-    operations = ['add', 'subtract', 'multiply', 'divide']   
+    operations = ['add', 'subtract', 'multiply'] #, 'divide']   
     a = random.randint(min,max)
     b = random.randint(min,max)
     operation = operations[random.randint(0, len(operations)-1)]
 
     if  (operation == 'add'):
-        return f'{a} + {b} = {a + b}'
+        return f'{a} + {b} = ____' #{a + b}'
     elif (operation == 'subtract'):
-        return f'{a} - {b} = {a - b}'
+        while True:
+            a = random.randint(min,max)
+            b = random.randint(min,max)
+            answer = b-a
+            if answer >= 0:
+                return f'{b} - {a} = ____' #{answer}'
     elif (operation == 'multiply'):
-        return f'{a} x {b} = {a * b}'
+        return f'{a} x {b} = ____' #{a * b}'
     elif (operation == 'divide'):
-        return f'{a} ÷ {b} = {a / b:.2f}'
+        while True:
+            a = random.randint(min,max)
+            b = random.randint(min,max)
+            answer = b / a
+            if answer % 1 == 0:
+                return f'{b} ÷ {a} = ____' #{int(answer)}'
 
 for i in range(num_questions):
     print(generate_random_maths_question(min, max))
