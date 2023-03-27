@@ -2,15 +2,28 @@
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, inch, mm
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 import random
 import numpy as np
 
-def generate_random_maths_question(min = 1, max = 10, increment = 1):
-    operations = ['add', 'subtract', 'multiply'] #, 'divide']   
-    # operations = ['subtract'] #, 'divide']  
-    a = random.randrange(min,max,increment)
-    b = random.randrange(min,max,increment)
+def generate_random_a_b(number, min = 1, max = 10, increment = 1):
+    rand_bool = random.randint(0,1)
+    print(f'rand bool: {rand_bool}')
+    if rand_bool:  
+        a = number
+        b = random.randrange(min,max,increment)
+    else: 
+        a = random.randrange(min,max,increment)
+        b = number
+    return a,b
+
+def generate_random_maths_question_for_a_number(number, min = 1, max = 10, increment = 1):
+    operations = ['add', 'subtract', 'multiply', 'divide']   
+    # operations = ['subtract'] #, 'divide']
+
+    a,b = generate_random_a_b(number, min, max, increment)
+
     operation = operations[random.randint(0, len(operations)-1)]
 
     if  (operation == 'add'):
@@ -18,8 +31,7 @@ def generate_random_maths_question(min = 1, max = 10, increment = 1):
 
     elif (operation == 'subtract'):
         while True:
-            a = random.randrange(min,max,increment)
-            b = random.randrange(min,max,increment)
+            a,b = generate_random_a_b(number, min, max, increment)
             
             if (a >= b):
                 answer = a-b
@@ -35,30 +47,34 @@ def generate_random_maths_question(min = 1, max = 10, increment = 1):
                     continue
 
     elif (operation == 'multiply'):
-        return f'{int(a/10)} x {b} = ____' #{a * b}'
+        return f'{a} x {b} = ____' #{a * b}'
 
     elif (operation == 'divide'):
         while True:
-            a = random.randrange(min,max,increment)
-            b = random.randrange(min,max,increment)
-            answer = b / a
+            a,b = generate_random_a_b(number, min, max, increment)
+            answer = a * number
             if answer % 1 == 0:
-                return f'{b} ÷ {a} = ____' #{int(answer)}'
+                return f'{answer} ÷ {number} = ____' #{int(answer)}'
+            # answer = b / number
+            # if answer % 1 == 0:
+            #     return f'{b} ÷ {number} = ____' #{int(answer)}'
 
-number = 10
+number = 5
 
 print()
 
-doc = SimpleDocTemplate(f"number_worksheet_{number}.pdf", pagesize=A4, )
+doc = SimpleDocTemplate(f"number_focus_worksheet_{number}.pdf", pagesize=A4, )
 # container for the 'Flowable' objects
+styles = getSampleStyleSheet()
+print(styles)
 elements = []
 
 width, height = A4
 
 num_questions = 10
-min = 0
-max = 101
-increment = 10
+min = 1
+max = 10
+increment = 1
 
 columns = 3
 rows = 10
@@ -68,12 +84,16 @@ row = []
 
 for r in range(rows):
     for c in range(columns):
-        row.append((generate_random_maths_question(min, max, increment)))
+        row.append((generate_random_maths_question_for_a_number(number, min, max, increment)))
     data.append(row)
     row=[]
 
 for row in data:
     print(row)
+
+title_text = f'Focusing on {number}!'
+title = Paragraph(title_text, style=styles['Title'])
+elements.append(title)
 
 t=Table(data,2*inch, 0.8*inch)
 print(f'inch:{inch}')

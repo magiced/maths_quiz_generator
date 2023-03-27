@@ -6,7 +6,7 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 import random
 import numpy as np
 
-number = 10
+number = 5
 
 doc = SimpleDocTemplate(f"Ready_Steady_Go_{number}.pdf", pagesize=A4)
 # container for the 'Flowable' objects
@@ -25,7 +25,7 @@ data = [line for i in range(10)]
 num_list = [i for i in range(1,13)]
 
 tt_list = []
-tt_list.append('Ready')
+tt_list.append('Ready!')
 for i in range(1,13):
     answer = i * number
     string = f"{i} x {number} =_____"
@@ -33,7 +33,7 @@ for i in range(1,13):
     # print(string)
 
 steady_list = []
-steady_list.append('Steady')
+steady_list.append('Steady!')
 random.shuffle(num_list)
 for i in num_list:
     answer = i * number
@@ -42,7 +42,7 @@ for i in num_list:
     # print(string)
 
 go_list = []
-go_list.append('Go')
+go_list.append('Go!')
 random.shuffle(num_list)
 for i in num_list:
     answer = i * number
